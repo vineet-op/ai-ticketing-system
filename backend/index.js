@@ -18,7 +18,7 @@ mongoose
             console.log(`✅ Server is running on port ${process.env.PORT}`);
         });
     })
-    .catch((err) => console.log(" ❌ Errors while connecting to DB", err));
+    .catch((err) => console.log("❌ Errors while connecting to DB", err));
 
 app.get("/", async (req, res) => {
     res.json({

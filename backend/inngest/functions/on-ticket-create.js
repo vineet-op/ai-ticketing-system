@@ -71,7 +71,7 @@ export const onTicketCreated = inngest.createFunction(
             });
 
 
-            await setp.run("send-email-notification", async () => {
+            await step.run("send-email-notification", async () => {
                 if (moderator) {
                     const finalTicket = await Ticket.findById(ticket._id);
                     await SendEmail(

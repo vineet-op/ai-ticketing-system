@@ -8,12 +8,10 @@ export const userSignup = async (req, res) => {
 
     const { email, password, skills = [] } = req.body
 
-    if (!email || !password) {
-        throw new Error("Missing credentials")
-    }
+
 
     try {
-        const hashPassword = bcrypt.hash(password, 10)
+        const hashPassword = await bcrypt.hash(password, 10)
         const user = await User.create({ email, password: hashPassword, skills })
 
         //inngest
@@ -38,7 +36,7 @@ export const userSignup = async (req, res) => {
 }
 
 export const userLogin = async (req, res) => {
-    const { email, password, skills = [] } = req.body
+    const { email, password } = req.body
 
     if (!email || !password) {
         throw new Error("Missing credentials")

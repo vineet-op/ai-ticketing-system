@@ -6,6 +6,7 @@ import { authMiddleware } from "../middleware/auth.js"
 const router = express.Router()
 
 router.post("/update-user", authMiddleware, userUpdate)
+
 router.get("/getusers", authMiddleware, getUsers)
 
 router.post("/signup", userSignup)

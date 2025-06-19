@@ -6,11 +6,6 @@ export const createTicket = async (req, res) => {
     try {
         const { title, description } = req.body
 
-        if (!title || !description) {
-            res.status(401).json({
-                message: "Missing credentials"
-            })
-        }
 
         const newTicket = await Ticket.create({
             title,
@@ -21,7 +16,7 @@ export const createTicket = async (req, res) => {
         await inngest.send({
             name: "ticket/created",
             data: {
-                ticketId: (await newTicket)._id.toString(),
+                ticketId: (newTicket)._id.toString(),
                 title,
                 description,
                 createdBy: req.user._id.toString()
@@ -33,6 +28,7 @@ export const createTicket = async (req, res) => {
             ticket: newTicket
         })
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             message: "Failed to Create Ticket", details: error.message
         })
@@ -45,18 +41,18 @@ export const getTickets = async (req, res) => {
         const user = req.user
         let tickets = []
 
-        if (user.role != "user") {
-            tickets = Ticket.find({})
+        if (user.role !== "user") {
+            tickets = await Ticket.find({})
                 .populate("assignedTo", ["email", "_id"])
                 .sort({ createdAt: -1 })
         }
         else {
-            const tickets = await Ticket.find({ createdBy: user._id })
+            tickets = await Ticket.find({ createdBy: user._id })
                 .select("title description status createdAt")
                 .sort({ createdAt: -1 })
         }
 
-        return res.json(200).json({ tickets })
+        return res.status(200).json({ tickets: tickets })
 
     } catch (error) {
         res.status(500).json({
@@ -73,13 +69,13 @@ export const getTicket = async (req, res) => {
         let ticket
 
         if (user.role !== "user") {
-            ticket = Ticket.findById(req.params.id)
+            ticket = await Ticket.findById(req.params.id)
                 .populate("assignedTo", ["email", "_id"])
         }
         else {
-            ticket = Ticket.findOne({
+            ticket = await Ticket.findOne({
                 createdBy: req.user._id,
-                _id: req.params._id
+                _id: req.params.id
             })
                 .select("title description status createdAt")
         }

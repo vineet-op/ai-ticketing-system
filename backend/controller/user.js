@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { inngest } from "../inngest/client.js"
 import User from "../models/User.js"
 
-
+//OK
 export const userSignup = async (req, res) => {
 
     const { email, password, skills = [] } = req.body
@@ -15,7 +15,6 @@ export const userSignup = async (req, res) => {
         const user = await User.create({ email, password: hashPassword, skills })
 
         //inngest
-
         await inngest.send({
             name: "user/signup",
             data: {
@@ -35,6 +34,7 @@ export const userSignup = async (req, res) => {
     }
 }
 
+//OK
 export const userLogin = async (req, res) => {
     const { email, password } = req.body
 
@@ -132,6 +132,8 @@ export const userUpdate = async (req, res) => {
     }
 }
 
+
+//OK
 export const getUsers = async (req, res) => {
     try {
 
@@ -141,7 +143,7 @@ export const getUsers = async (req, res) => {
             })
         }
 
-        const users = await User.find().select(-password)
+        const users = await User.find({}).select("-password")
 
         res.json({
             users: users

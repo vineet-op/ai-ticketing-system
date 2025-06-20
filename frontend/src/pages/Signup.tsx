@@ -46,10 +46,10 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background">
-            <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-xl shadow-md">
-                <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-                <form onSubmit={handleSignup} className="space-y-4">
+        <div className="min-h-screen font-sans flex items-center justify-center bg-background bg-neutral-950">
+            <div className="w-full max-w-md p-8 space-y-10 bg-card rounded-xl shadow-sm  bg-black/75 shadow-green-300 text-white ">
+                <h2 className="text-2xl text-center tracking-tighter font-semibold font-sans">Create your account</h2>
+                <form onSubmit={handleSignup} className="space-y-4 flex flex-col gap-3 pt-16">
                     <div>
                         <label className="block text-sm font-medium mb-1">Email</label>
                         <Input
@@ -74,22 +74,19 @@ const Signup = () => {
                     </div>
                     <Button
                         type="submit"
-                        className="w-full"
+                        className="w-full bg-green-500 cursor-pointer hover:bg-green-300"
                         disabled={loading}
                     >
                         {loading ? 'Signing Up...' : 'Sign Up'}
                     </Button>
-                </form>
-                <div className="text-center text-sm text-muted-foreground">
-                    Already have an account?{' '}
+
                     <Button
-                        variant="link"
+                        onClick={() => navigate("/login")}
                         size="sm"
-                        onClick={() => navigate('/login')}
-                    >
-                        Log in
+                        className='cursor-pointer text-sm self-center'>
+                        Already have an account ?<span className='font-medium underline text-green-700'>{" "} Login</span>
                     </Button>
-                </div>
+                </form>
             </div>
         </div>
     )

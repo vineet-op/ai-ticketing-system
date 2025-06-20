@@ -6,20 +6,20 @@ import analyzeTicket from "../../utils/ai.js";
 import { SendEmail } from "../../utils/mailer.js";
 
 
-
 export const onTicketCreated = inngest.createFunction(
     { id: "on-ticket-created", retries: 2 },
     { event: "ticket/created" },
 
     async ({ event, step }) => {
         try {
-            const { ticketsId } = event.data
+            console.log("event", event)
+            const { ticketId } = event.data
 
             //Get Ticket from the db
             const ticket = await step.run("fetch-ticket", async () => {
-                const ticketObject = await Ticket.findById(ticketsId);
-
-                if (!ticket) {
+                const ticketObject = await Ticket.findById(ticketId);
+                console.log("ticketObject", ticketObject)
+                if (!ticketObject) {
                     throw new NonRetriableError("Ticket not found")
                 }
                 return ticketObject
@@ -31,6 +31,7 @@ export const onTicketCreated = inngest.createFunction(
             });
 
             const aiResponse = await analyzeTicket(ticket);
+            console.log("AiResponse", aiResponse);
 
             const relatedskills = await step.run("ai-processing", async () => {
                 let skills = [];
@@ -77,18 +78,16 @@ export const onTicketCreated = inngest.createFunction(
                     await SendEmail(
                         moderator.email,
                         "Ticket Assigned",
-                        `A new ticket is assigned to you ${finalTicket.title}`
+                        `A new ticket is assigned to you: ${finalTicket.title}
+                        Description: ${finalTicket.description}
+                        Related Skills: ${relatedskills.join(", ")}`
                     );
                 }
             });
-
             return { success: true };
-
-
         } catch (error) {
-            console.error("❌ Error running the step", err.message);
+            console.error("❌ Error running the step", error.message);
             return { success: false };
         }
     }
-
 )

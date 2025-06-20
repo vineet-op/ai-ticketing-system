@@ -44,21 +44,30 @@ const analyzeTicket = async (ticket) => {
 
         ---
 
-Ticket information:
+        Ticket information:
 
-- Title: ${ticket.title}
-- Description: ${ticket.description}`);
+        - Title: ${ticket.title}
+        - Description: ${ticket.description}`);
 
-    const raw = response.output[0].context;
+    const raw = response.output[0].content;
+
 
     try {
-        const match = raw.match(/```json\s*([\s\S]*?)\s*```/i);
-        const jsonString = match ? match[1] : raw.trim();
-        return JSON.parse(jsonString);
+        // Try parsing the raw response directly
+        try {
+            console.log("Trying to parse raw response as JSON:", raw);
+            return JSON.parse(raw.trim());
+        } catch (directParseError) {
+            // If that fails, try extracting from code fences
+            const match = raw.match(/```json\s*([\s\S]*?)\s*```/i);
+            const jsonString = match ? match[1] : raw.trim();
+            return JSON.parse(jsonString);
+        }
     } catch (e) {
-        console.log("Failed to parse JSON from AI response" + e.message);
-        return null; // watch out for this
+        console.log("Failed to parse JSON from AI response:", e.message, "Raw response:", raw);
+        return null;
     }
+
 };
 
 export default analyzeTicket;

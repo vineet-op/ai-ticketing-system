@@ -7,6 +7,8 @@ import Ticket from './pages/Ticket'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Admin from './pages/Admin'
+import Homepage from './pages/Homepage'
+
 
 function App() {
 
@@ -14,7 +16,14 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
+
         <Route path='/'
+          element={
+            <Homepage />
+          } />
+
+
+        <Route path='/tickets'
           element={
             <Check_Auth protect={true}>
               <Tickets />

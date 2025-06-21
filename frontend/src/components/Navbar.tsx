@@ -9,7 +9,7 @@ const Navbar = () => {
     const navigate = useNavigate()
 
     return (
-        <nav className='w-full pt-8 font-sans flex bg-neutral-950 items-center text-center justify-between px-10'>
+        <nav className='w-full pt-8 font-sans flex bg-neutral-950 items-center text-center justify-between px-10 py-8'>
             <div className='text-lg font-normal flex gap-5 font-sans text-white text-center items-center justify-center'>
                 <Ticket className='text-green-500 text-xl size-7' />
                 <div className='text-xl'>
